@@ -28,7 +28,7 @@ public class ProductoService {
         return productoRepository.findByNombre(nombre);
     }
 
-    public void  save(Producto producto){
+    public void save(Producto producto){
         productoRepository.save(producto);
     }
 
