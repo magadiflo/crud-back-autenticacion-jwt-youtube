@@ -8,6 +8,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/***
+ * Lo que hace esta clase es convertir la clase Usuario (que es la
+ * encargada de mapear los datos de la tabla usuarios en la BD)
+ * el atributo rol en authorities, que es una clase propia del
+ * núcleo de seguridad de Spring. Obtener autorización del usuario para hacer
+ * o no hacer cosas
+ */
 public class UsuarioPrincipal implements UserDetails {
 
     private String nombre;
