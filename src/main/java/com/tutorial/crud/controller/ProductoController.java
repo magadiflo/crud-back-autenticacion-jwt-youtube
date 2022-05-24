@@ -4,12 +4,14 @@ import com.tutorial.crud.dto.Mensaje;
 import com.tutorial.crud.dto.ProductoDto;
 import com.tutorial.crud.entity.Producto;
 import com.tutorial.crud.service.ProductoService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -21,12 +23,15 @@ public class ProductoController {
     @Autowired
     ProductoService productoService;
 
+    @ApiOperation("Muestra una lista de productos")
     @GetMapping("/list")
-    public ResponseEntity<List<Producto>> list(){
+    public ResponseEntity<List<Producto>> list() {
         List<Producto> list = productoService.list();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
+    //Si quisieramos ocultar este endpoint para que no se vea con el Swagger
+    @ApiIgnore
     @GetMapping("/detail/{id}")
     public ResponseEntity<Producto> getById(@PathVariable("id") int id){
         if(!productoService.existsById(id))
@@ -35,6 +40,8 @@ public class ProductoController {
         return new ResponseEntity(producto, HttpStatus.OK);
     }
 
+    //Si quisieramos ocultar este endpoint para que no se vea con el Swagger
+    @ApiIgnore
     @GetMapping("/detailname/{nombre}")
     public ResponseEntity<Producto> getByNombre(@PathVariable("nombre") String nombre){
         if(!productoService.existsByNombre(nombre))
