@@ -19,6 +19,10 @@ public class UsuarioService {
         return this.usuarioRepository.findByNombreUsuario(nombreUsuario);
     }
 
+    public Optional<Usuario> getByTokenPassword(String tokenPassword) {
+        return this.usuarioRepository.findByTokenPassword(tokenPassword);
+    }
+
     public Optional<Usuario> getByNombreUsuarioOrEmail(String usuarioOrEmail) {
         return this.usuarioRepository.findByNombreUsuarioOrEmail(usuarioOrEmail, usuarioOrEmail);
     }
