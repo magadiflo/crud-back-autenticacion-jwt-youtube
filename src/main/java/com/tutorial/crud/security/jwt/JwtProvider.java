@@ -46,7 +46,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String getNombreUsuarioFromToken(String token){
+    public String getNombreUsuarioFromToken(String token) {
         return Jwts.parser().setSigningKey(this.secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -54,7 +54,7 @@ public class JwtProvider {
         try {
             Jwts.parser().setSigningKey(this.secret.getBytes()).parseClaimsJws(token);
             return true;
-        } catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             logger.error("Token mal formado");
         } catch (UnsupportedJwtException e) {
             logger.error("Token no soportado");
@@ -69,18 +69,24 @@ public class JwtProvider {
     }
 
     public String refreshToken(JwtDto jwtDto) throws ParseException {
-        JWT jwt = JWTParser.parse(jwtDto.getToken());
-        JWTClaimsSet claims = jwt.getJWTClaimsSet();
-        String nombreUsuario  = claims.getSubject();
-        List<String> roles = (List<String>) claims.getClaim("roles");
+        try {
+            Jwts.parser().setSigningKey(this.secret.getBytes()).parseClaimsJws(jwtDto.getToken());
+        } catch (ExpiredJwtException e) {
+            JWT jwt = JWTParser.parse(jwtDto.getToken());
+            JWTClaimsSet claims = jwt.getJWTClaimsSet();
+            String nombreUsuario = claims.getSubject();
+            List<String> roles = (List<String>) claims.getClaim("roles");
 
-        return Jwts.builder()
-                .setSubject(nombreUsuario)
-                .claim("roles", roles)
-                .setIssuedAt(new Date()) //Fecha de creación
-                .setExpiration(new Date(new Date().getTime() + this.expiration))
-                .signWith(SignatureAlgorithm.HS512, this.secret.getBytes())
-                .compact();
+            return Jwts.builder()
+                    .setSubject(nombreUsuario)
+                    .claim("roles", roles)
+                    .setIssuedAt(new Date()) //Fecha de creación
+                    .setExpiration(new Date(new Date().getTime() + this.expiration))
+                    .signWith(SignatureAlgorithm.HS512, this.secret.getBytes())
+                    .compact();
+
+        }
+        return null;
     }
 
 }
